@@ -43,15 +43,20 @@ class ShelterManager:
         print("")
 
     def print_all_animals_basic_details(self):
-        animals = {}
-        self.cur.execute("SELECT * FROM animal_database")
-        rows = self.cur.fetchall()
-        for animal in rows:
-            animals[animal[0]] = [animal[1], animal[2], animal[3], animal[4]]
-        animal_data = pandas.DataFrame(animals).T
-        animal_data.reset_index(inplace=True)
-        animal_data.columns = ["---NAME---", "--TYPE--", "--DATE OF BIRTH--", "--Size--", "--Color--"]
-        print(animal_data)
+        try:
+            animals = {}
+            self.cur.execute("SELECT * FROM animal_database")
+            rows = self.cur.fetchall()
+            for animal in rows:
+                animals[animal[0]] = [animal[1], animal[2], animal[3], animal[4]]
+            animal_data = pandas.DataFrame(animals).T
+            animal_data.reset_index(inplace=True)
+            animal_data.columns = ["---NAME---", "--TYPE--", "--DATE OF BIRTH--", "--Size--", "--Color--"]
+            print(animal_data)
+        except Exception:
+            print("")
+            print("There was an error. There are no animals in the database")
+            print("")
 
     def print_details_of_one_animal(self, animal_name):
         print("")
@@ -220,9 +225,9 @@ class ShelterManager:
                 exit(0)
 
 if __name__ == "__main__":
-    print("Welcome to our ANIMAL SHELTER management system! FIIIIRSST")
     while True:
         if os.path.isfile(database_path) is False:
+            print("Welcome to our ANIMAL SHELTER management system!")
             time.sleep(.5)
             print("------------------------------------------------")
             print("")
