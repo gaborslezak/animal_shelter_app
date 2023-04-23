@@ -36,9 +36,8 @@ class ShelterManager:
         animal_data.columns = ["---NAME---", "--TYPE--", "--DATE OF BIRTH--", "--Size--", "--Color--"]
         print(animal_data)
 
-    def print_details_of_one_animal(self):
+    def print_details_of_one_animal(self, animal_name):
         print("")
-        animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.").upper()
         animal_query = ("SELECT * FROM animal_database WHERE name = ?")
         self.cur.execute(animal_query, (animal_name,))
         rows = self.cur.fetchall()
@@ -89,7 +88,8 @@ class ShelterManager:
             case "2":
                 self.print_all_animals_basic_details()
             case "3":
-                self.print_details_of_one_animal()
+                animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.").upper()
+                self.print_details_of_one_animal(animal_name)
             case "10":
                 exit(0)
 
