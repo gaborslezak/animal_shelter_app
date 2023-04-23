@@ -36,12 +36,36 @@ class ShelterManager:
         animal_data.columns = ["---NAME---", "--TYPE--", "--DATE OF BIRTH--", "--Size--", "--Color--"]
         print(animal_data)
 
+    def print_details_of_one_animal(self):
+        print("")
+        animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.")
+        animal_query = ("SELECT * FROM animal_database WHERE name = ?")
+        self.cur.execute(animal_query, (animal_name,))
+        rows = self.cur.fetchall()
+        print("")
+        print("-------------------------------------------")
+        print(f"Details of {animal_name}")
+        print("-------------------------------------------")
+        for row in rows:
+            print("Name = ", row[0])
+            print("Type  = ", row[1])
+            print("Date of Birth  = ", row[2])
+            print("Size  = ", row[3])
+            print("Color  = ", row[4])
+        print("-------------------------------------------")
+        print(f"------End of {animal_name} details--------")
+        print("-------------------------------------------")
+        print("")
+        print("")
+
+
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
         print("------------------------------------------------")
         print("Type '0' to create a database.")
         print("Type '1' to enter a newly rescued animal.")
         print("Type '2' to print every animal's basic details.")
+        print("Type '3' to print all details of an animal. You can search by animal's name.")
         print("Type '10' to exit the program.")
         select_menu = input("What would you like to do? ")
         match select_menu:
@@ -57,6 +81,8 @@ class ShelterManager:
                 self.add_animal(given_animal)
             case "2":
                 self.print_all_animals_basic_details()
+            case "3":
+                self.print_details_of_one_animal()
             case "10":
                 exit(0)
 
