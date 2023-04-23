@@ -281,9 +281,12 @@ class ShelterManager:
                 delete_query = ("DELETE FROM animal_database WHERE name = ?")
                 self.cur.execute(delete_query, (animal_name,))
                 self.conn.commit()
+                print("")
                 print(f"{animal_name} has been deleted from the database.")
+                print("")
             else:
                 print(f"{animal_name} was not deleted from the database.")
+                print("")
                 print("You have to enter DELETE in all uppercase, if you wish to delete an animal.")
                 print("")
                 time.sleep(1)
@@ -321,6 +324,7 @@ class ShelterManager:
                 animal_name = input("Which animal would you like to delete? Please enter the name of the animal: ").upper()
                 self.delete_animal(animal_name)
             case "10":
+                self.conn.close()
                 exit(0)
 
 if __name__ == "__main__":
