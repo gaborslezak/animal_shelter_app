@@ -20,16 +20,19 @@ class ShelterManager:
         self.cur.execute('''CREATE TABLE IF NOT EXISTS animal_database
                             (name TEXT, animal_type TEXT, date_of_birth TEXT, size TEXT, color TEXT) ''')
         self.conn.commit()
+        print("")
 
     def add_animal(self, animal):
         self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (animal.name, animal.animal_type, animal.date_of_birth, animal.size, animal.color) )
         self.conn.commit()
+        print("Loading the main menu...")
+        time.sleep(2)
+        print("")
 
     def print_all_animals_basic_details(self):
         animals = {}
         self.cur.execute("SELECT * FROM animal_database")
         rows = self.cur.fetchall()
-        print(rows)
         for animal in rows:
             animals[animal[0]] = [animal[1], animal[2], animal[3], animal[4]]
         animal_data = pandas.DataFrame(animals).T
@@ -68,7 +71,7 @@ class ShelterManager:
             print("-------------------------------------------")
             print("")
             print("")
-            print("Loading the main menu again...")
+            print("Loading the main menu...")
             time.sleep(2)
 
     def change_name_of_animal(self, animal_name):
@@ -139,7 +142,8 @@ class ShelterManager:
     def update_animal_information(self):
         print("")
         self.print_all_animals_basic_details()
-        animal_name = input("Which animal's information would you like to change?").upper()
+        print("")
+        animal_name = input("Which animal's information would you like to change? Enter the animal's name: ").upper()
         print("")
         print(f"What data would you like to change on {animal_name} profile?")
         print("{:<15} {:<15} {:<15} {:<15} {:<15}".format("1. NAME", "2. TYPE", "3. DATE OF BIRTH", "4. SIZE", "5. COLOR"))
@@ -160,7 +164,7 @@ class ShelterManager:
         print("")
         print(f"You are going to delete all details of {animal_name}")
         print("Are you sure about this? You can't revert these changes")
-        make_sure = input(f"Type DELETE if you really would like to delete {animal_name} from the database: ")
+        make_sure = input(f"Type DELETE (in uppercase) if you really would like to delete {animal_name} from the database: ")
         if make_sure == "DELETE":
             delete_query = ("DELETE FROM animal_database WHERE name = ?")
             self.cur.execute(delete_query, (animal_name,))
@@ -170,14 +174,22 @@ class ShelterManager:
 
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
+        time.sleep(.5)
         print("------------------------------------------------")
         print("Type '0' to create a database.")
+        time.sleep(.5)
         print("Type '1' to enter a newly rescued animal.")
+        time.sleep(.5)
         print("Type '2' to print every animal's basic details.")
+        time.sleep(.5)
         print("Type '3' to print all details of an animal. You can search by animal's name.")
+        time.sleep(.5)
         print("Type '4' to change the details of an animal.")
+        time.sleep(.5)
         print("Type '5' to delete an animal from the database")
+        time.sleep(.5)
         print("Type '10' to exit the program.")
+        time.sleep(.5)
         select_menu = input("What would you like to do? ")
         match select_menu:
             case "0":
@@ -193,11 +205,12 @@ class ShelterManager:
             case "2":
                 self.print_all_animals_basic_details()
             case "3":
-                animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.").upper()
+                animal_name = input("Which animal would you like to get more information? Please enter the name of the animal: ").upper()
                 self.print_details_of_one_animal(animal_name)
             case "4":
                 self.update_animal_information()
             case "5":
+                print("")
                 animal_name = input("Which animal would you like to delete? Please enter the name of the animal: ").upper()
                 self.delete_animal(animal_name)
             case "10":
