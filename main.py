@@ -78,6 +78,19 @@ class ShelterManager:
         time.sleep(2)
         self.print_details_of_one_animal(new_animal_name)
 
+    def change_type_of_animal(self, animal_name):
+        print("")
+        new_animal_type = input(f"What's the type of the {animal_name}").upper()
+        type_change_query = ("UPDATE animal_database SET animal_type = ? WHERE name =?")
+        self.cur.execute(type_change_query, (new_animal_type, animal_name))
+        self.conn.commit()
+        time.sleep(1)
+        print(f"{animal_name}'s details has been changed. Type: {new_animal_type}.")
+        time.sleep(1)
+        print(f"Printing {animal_name}'s details:")
+        time.sleep(2)
+        self.print_details_of_one_animal(animal_name)
+
     def update_animal_information(self):
         print("")
         self.print_all_animals_basic_details()
@@ -89,6 +102,8 @@ class ShelterManager:
         match select_data:
             case "1":
                 self.change_name_of_animal(animal_name)
+            case "2":
+                self.change_type_of_animal(animal_name)
 
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
