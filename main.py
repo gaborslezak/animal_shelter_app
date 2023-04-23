@@ -93,12 +93,38 @@ class ShelterManager:
     
     def change_dob_of_animal(self, animal_name):
         print("")
-        new_animal_dob = input(f"What is correct the date of birth of {animal_name}").upper()
+        new_animal_dob = input(f"What is the correct date of birth of {animal_name}?").upper()
         dob_change_query = ("UPDATE animal_database SET date_of_birth = ? WHERE name =?")
         self.cur.execute(dob_change_query, (new_animal_dob, animal_name))
         self.conn.commit()
         time.sleep(1)
         print(f"{animal_name}'s date of birth has been changed to {new_animal_dob}.")
+        time.sleep(1)
+        print(f"Printing {animal_name}'s details:")
+        time.sleep(2)
+        self.print_details_of_one_animal(animal_name)
+
+    def change_size_of_animal(self, animal_name):
+        print("")
+        new_animal_size = input(f"What is the correct size of {animal_name}").upper()
+        size_change_query = ("UPDATE animal_database SET size = ? WHERE name =?")
+        self.cur.execute(size_change_query, (new_animal_size, animal_name))
+        self.conn.commit()
+        time.sleep(1)
+        print(f"{animal_name}'s size has been changed to {new_animal_size}.")
+        time.sleep(1)
+        print(f"Printing {animal_name}'s details:")
+        time.sleep(2)
+        self.print_details_of_one_animal(animal_name)
+
+    def change_color_of_animal(self, animal_name):
+        print("")
+        new_animal_color = input(f"What is the correct color of {animal_name}?").upper()
+        color_change_query = ("UPDATE animal_database SET color = ? WHERE name =?")
+        self.cur.execute(color_change_query, (new_animal_color, animal_name))
+        self.conn.commit()
+        time.sleep(1)
+        print(f"{animal_name}'s color has been changed to {new_animal_color}.")
         time.sleep(1)
         print(f"Printing {animal_name}'s details:")
         time.sleep(2)
@@ -119,6 +145,10 @@ class ShelterManager:
                 self.change_type_of_animal(animal_name)
             case "3":
                 self.change_dob_of_animal(animal_name)
+            case "4":
+                self.change_size_of_animal(animal_name)
+            case "5":
+                self.change_color_of_animal(animal_name)
 
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
