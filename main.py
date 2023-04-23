@@ -8,6 +8,7 @@ database_path_sys = "animals.db"
 
 class Animal:
     def __init__(self, name: str, animal_type: str, date_of_birth: str, size: str, color: str) -> None:
+        '''Base class for the animals in the shelter'''
         self.name = name
         self.animal_type = animal_type
         self.date_of_birth = date_of_birth
@@ -21,12 +22,14 @@ class ShelterManager:
         self.create_table()
 
     def create_table(self):
+        '''Creates the database'''
         self.cur.execute('''CREATE TABLE IF NOT EXISTS animal_database
                             (name TEXT PRIMARY KEY, animal_type TEXT, date_of_birth TEXT, size TEXT, color TEXT) ''')
         self.conn.commit()
         print("")
 
     def determine_animal_type(self) -> str:
+        '''Used to determine an animal's type in the database.'''
         while True:
                 enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
                 regex_type_pattern = r"^(cat|dog)$"
@@ -38,6 +41,7 @@ class ShelterManager:
         return enter_animal_type
     
     def determine_animal_dob(self) -> str:
+        '''Used to determine an animal's date of birth in the database.'''
         while True:
             print("Enter the date of birth (or an estimate),")
             enter_animal_date_of_birth = input("in the following format YYYY-MM-DD: ").upper()
@@ -50,6 +54,7 @@ class ShelterManager:
         return enter_animal_date_of_birth
 
     def determine_animal_size(self) -> str:
+        '''Used to determine an animal's size in the database.'''
         while True:
             enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
             regex_size_pattern = r"^(small|medium|large|)$"
@@ -60,6 +65,7 @@ class ShelterManager:
         return enter_animal_size
 
     def add_animal(self):
+        '''Used to add an animal into the database.'''
         try:
             enter_animal_name = input("Enter the name of the animal: ").upper()
             enter_animal_type = self.determine_animal_type()
@@ -84,6 +90,7 @@ class ShelterManager:
             print("")
 
     def print_all_animals_basic_details(self):
+        '''Prints out the basic details of all animals from the database.'''
         try:
             animals = {}
             self.cur.execute("SELECT * FROM animal_database")
@@ -100,6 +107,7 @@ class ShelterManager:
             print("")
 
     def print_details_of_one_animal(self, animal_name: str):
+        '''Prints out the all the details of given animal.'''
         print("")
         animal_query = ("SELECT * FROM animal_database WHERE name = ?")
         self.cur.execute(animal_query, (animal_name,))
@@ -134,6 +142,7 @@ class ShelterManager:
             time.sleep(2)
 
     def change_name_of_animal(self, animal_name: str):
+        '''Used to change the name of an animal'''
         try:
             print("")
             new_animal_name = input(f"What's the new name of {animal_name}?").upper()
@@ -154,6 +163,7 @@ class ShelterManager:
             print("")
 
     def change_type_of_animal(self, animal_name: str):
+        '''Used to change the type of an animal'''
         print("")
         # new_animal_type = input(f"What's the type of the {animal_name}?").upper()
         new_animal_type = self.determine_animal_type()
@@ -168,6 +178,7 @@ class ShelterManager:
         self.print_details_of_one_animal(animal_name)
     
     def change_dob_of_animal(self, animal_name: str):
+        '''Used to change the date of birth of an animal'''
         print("")
         new_animal_dob = self.determine_animal_dob()
         # new_animal_dob = input(f"What is the correct date of birth of {animal_name}?").upper()
@@ -182,6 +193,7 @@ class ShelterManager:
         self.print_details_of_one_animal(animal_name)
 
     def change_size_of_animal(self, animal_name: str):
+        '''Used to change the size of an animal'''
         print("")
         new_animal_size = self.determine_animal_size()
         # new_animal_size = input(f"What is the correct size of {animal_name}").upper()
@@ -196,6 +208,7 @@ class ShelterManager:
         self.print_details_of_one_animal(animal_name)
 
     def change_color_of_animal(self, animal_name: str):
+        '''Used to change the color of an animal'''
         print("")
         new_animal_color = input(f"What is the correct color of {animal_name}?").upper()
         color_change_query = ("UPDATE animal_database SET color = ? WHERE name =?")
@@ -209,6 +222,7 @@ class ShelterManager:
         self.print_details_of_one_animal(animal_name)
 
     def update_animal_information(self):
+        '''Updates to change the color of an animal'''
         print("")
         self.print_all_animals_basic_details()
         print("")
@@ -230,6 +244,7 @@ class ShelterManager:
                 self.change_color_of_animal(animal_name)
 
     def delete_animal(self, animal_name: str):
+        '''Deletes an animal from the database'''
         print("")
         print(f"You are going to delete all details of {animal_name}")
         print("Are you sure about this? You can't revert these changes")
@@ -242,6 +257,7 @@ class ShelterManager:
             print(f"{animal_name} was not deleted from the database.")
 
     def main_menu(self):
+        '''Option selection screen'''
         print("Welcome to our ANIMAL SHELTER management system!")
         time.sleep(.5)
         print("------------------------------------------------")
