@@ -33,7 +33,7 @@ class ShelterManager:
             animals[animal[0]] = [animal[1], animal[2], animal[3], animal[4]]
         animal_data = pandas.DataFrame(animals).T
         animal_data.reset_index(inplace=True)
-        animal_data.columns = ["Animal\'s name", "Animal's Type", "Date of Birth", "Size", "Color"]
+        animal_data.columns = ["---NAME---", "--TYPE--", "--DATE OF BIRTH--", "--Size--", "--Color--"]
         print(animal_data)
 
     def main_menu(self):
