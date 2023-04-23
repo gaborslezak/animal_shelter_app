@@ -1,5 +1,6 @@
 import sqlite3
 import pandas
+import time
 
 class Animal:
     def __init__(self, name: str, animal_type: str, date_of_birth: str, size: str, color: str) -> None:
@@ -64,6 +65,30 @@ class ShelterManager:
             print("")
             print("")
 
+    def change_name_of_animal(self, animal_name):
+        print("")
+        new_animal_name = input(f"What's the new name of {animal_name}").upper()
+        name_change_query = ("UPDATE animal_database SET name = ? WHERE name =?")
+        self.cur.execute(name_change_query, (new_animal_name, animal_name))
+        self.conn.commit()
+        time.sleep(1)
+        print(f"{animal_name}'s details has been changed to {new_animal_name}.")
+        time.sleep(1)
+        print(f"Printing {new_animal_name}'s details:")
+        time.sleep(2)
+        self.print_details_of_one_animal(new_animal_name)
+
+    def update_animal_information(self):
+        print("")
+        self.print_all_animals_basic_details()
+        animal_name = input("Which animal's information would you like to change?").upper()
+        print("")
+        print(f"What data would you like to change on {animal_name} profile?")
+        print("{:<15} {:<15} {:<15} {:<15} {:<15}".format("1. NAME", "2. TYPE", "3. DATE OF BIRTH", "4. SIZE", "5. COLOR"))
+        select_data = input("Enter the data's number, that you would like to change.")
+        match select_data:
+            case "1":
+                self.change_name_of_animal(animal_name)
 
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
@@ -72,6 +97,7 @@ class ShelterManager:
         print("Type '1' to enter a newly rescued animal.")
         print("Type '2' to print every animal's basic details.")
         print("Type '3' to print all details of an animal. You can search by animal's name.")
+        print("Type '4' to change the details of an animal.")
         print("Type '10' to exit the program.")
         select_menu = input("What would you like to do? ")
         match select_menu:
@@ -90,6 +116,8 @@ class ShelterManager:
             case "3":
                 animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.").upper()
                 self.print_details_of_one_animal(animal_name)
+            case "4":
+                self.update_animal_information()
             case "10":
                 exit(0)
 
