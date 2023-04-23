@@ -22,47 +22,54 @@ class ShelterManager:
 
     def create_table(self):
         self.cur.execute('''CREATE TABLE IF NOT EXISTS animal_database
-                            (name TEXT, animal_type TEXT, date_of_birth TEXT, size TEXT, color TEXT) ''')
+                            (name TEXT PRIMARY KEY, animal_type TEXT, date_of_birth TEXT, size TEXT, color TEXT) ''')
         self.conn.commit()
         print("")
 
     def add_animal(self):
-        enter_animal_name = input("Enter the name of the animal: ").upper()
-        while True:
-            enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
-            regex_type_pattern = r"^(cat|dog)$"
-            if re.match(regex_type_pattern, enter_animal_type, re.IGNORECASE):
-                print(f"We are adding a {enter_animal_type} to the database.")
-                break
-            else:
-                print("You have to enter one of these two option: CAT or DOG")
-        while True:
-            print("Enter the date of birth (or an estimate),")
-            enter_animal_date_of_birth = input("in the following format YYYY-MM-DD: ").upper()
-            regex_date_pattern = r"^(\d{4})-(0[1-9]|1[0-2]|[1-9])-([1-9]|0[1-9]|[1-2]\d|3[0-1])$"
-            if re.match(regex_date_pattern, enter_animal_date_of_birth):
-                break
-            else:
-                print("You have to enter the DoB in the following format: YYYY-MM-DD")
-                print("")
-        while True:
-            enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
-            regex_size_pattern = r"^(small|medium|large|)$"
-            if re.match(regex_size_pattern, enter_animal_size, re.IGNORECASE):
-                break
-            else:
-                print("You have to enter one of these options: SMALL, MEDIUM or LARGE")
-        enter_animal_color = input("Enter the animal's color: ").upper()
-        self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color))
-        self.conn.commit()
-        print("")
-        print(f"You have just added {enter_animal_name} to the database.")
-        time.sleep(1)
-        print(f"Printing {enter_animal_name}'s details:")
-        time.sleep(1)
-        self.print_details_of_one_animal(enter_animal_name)
-        time.sleep(1)
-        print("")
+        try:
+            enter_animal_name = input("Enter the name of the animal: ").upper()
+            while True:
+                enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
+                regex_type_pattern = r"^(cat|dog)$"
+                if re.match(regex_type_pattern, enter_animal_type, re.IGNORECASE):
+                    print(f"We are adding a {enter_animal_type} to the database.")
+                    break
+                else:
+                    print("You have to enter one of these two option: CAT or DOG")
+            while True:
+                print("Enter the date of birth (or an estimate),")
+                enter_animal_date_of_birth = input("in the following format YYYY-MM-DD: ").upper()
+                regex_date_pattern = r"^(\d{4})-(0[1-9]|1[0-2]|[1-9])-([1-9]|0[1-9]|[1-2]\d|3[0-1])$"
+                if re.match(regex_date_pattern, enter_animal_date_of_birth):
+                    break
+                else:
+                    print("You have to enter the DoB in the following format: YYYY-MM-DD")
+                    print("")
+            while True:
+                enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
+                regex_size_pattern = r"^(small|medium|large|)$"
+                if re.match(regex_size_pattern, enter_animal_size, re.IGNORECASE):
+                    break
+                else:
+                    print("You have to enter one of these options: SMALL, MEDIUM or LARGE")
+            enter_animal_color = input("Enter the animal's color: ").upper()
+            self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color))
+            self.conn.commit()
+            print("")
+            print(f"You have just added {enter_animal_name} to the database.")
+            time.sleep(1)
+            print(f"Printing {enter_animal_name}'s details:")
+            time.sleep(1)
+            self.print_details_of_one_animal(enter_animal_name)
+            time.sleep(1)
+            print("")
+        except sqlite3.IntegrityError:
+            print("")
+            print("ERROR:")
+            print("These database uses the animal's name as primary key.")
+            print("Therefore only one animal can hold a name, each name must be unique!")
+            print("")
 
     def print_all_animals_basic_details(self):
         try:
