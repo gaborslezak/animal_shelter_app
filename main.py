@@ -107,7 +107,7 @@ class ShelterManager:
             print("")
         except Exception:
             print("")
-            print("There was an error. There are no animals in the database")
+            print("There was an error. There are no animals in the database.")
             print("")
 
     def print_details_of_one_animal(self, animal_name: str):
@@ -169,7 +169,6 @@ class ShelterManager:
     def change_type_of_animal(self, animal_name: str):
         '''Used to change the type of an animal'''
         print("")
-        # new_animal_type = input(f"What's the type of the {animal_name}?").upper()
         new_animal_type = self.determine_animal_type()
         type_change_query = ("UPDATE animal_database SET animal_type = ? WHERE name =?")
         self.cur.execute(type_change_query, (new_animal_type, animal_name))
@@ -185,7 +184,6 @@ class ShelterManager:
         '''Used to change the date of birth of an animal'''
         print("")
         new_animal_dob = self.determine_animal_dob()
-        # new_animal_dob = input(f"What is the correct date of birth of {animal_name}?").upper()
         dob_change_query = ("UPDATE animal_database SET date_of_birth = ? WHERE name =?")
         self.cur.execute(dob_change_query, (new_animal_dob, animal_name))
         self.conn.commit()
@@ -200,7 +198,6 @@ class ShelterManager:
         '''Used to change the size of an animal'''
         print("")
         new_animal_size = self.determine_animal_size()
-        # new_animal_size = input(f"What is the correct size of {animal_name}").upper()
         size_change_query = ("UPDATE animal_database SET size = ? WHERE name =?")
         self.cur.execute(size_change_query, (new_animal_size, animal_name))
         self.conn.commit()
@@ -269,14 +266,27 @@ class ShelterManager:
         '''Deletes an animal from the database'''
         print("")
         print(f"You are going to delete all details of {animal_name}")
-        print("Are you sure about this? You can't revert these changes")
-        make_sure = input(f"Type DELETE (in uppercase) if you really would like to delete {animal_name} from the database: ")
-        if make_sure == "DELETE":
-            delete_query = ("DELETE FROM animal_database WHERE name = ?")
-            self.cur.execute(delete_query, (animal_name,))
-            self.conn.commit()
+        animal_query = ("SELECT * FROM animal_database WHERE name = ?")
+        self.cur.execute(animal_query, (animal_name,))
+        rows = self.cur.fetchall()
+        if not rows:
+            print("")
+            print("The system was not able to find the animal you are looking for.")
+            print("Please check if you provided the correct name.")
+            print("")
         else:
-            print(f"{animal_name} was not deleted from the database.")
+            print("Are you sure about this? You can't revert these changes")
+            make_sure = input(f"Type DELETE (in uppercase) if you really would like to delete {animal_name} from the database: ")
+            if make_sure == "DELETE":
+                delete_query = ("DELETE FROM animal_database WHERE name = ?")
+                self.cur.execute(delete_query, (animal_name,))
+                self.conn.commit()
+                print(f"{animal_name} has been deleted from the database.")
+            else:
+                print(f"{animal_name} was not deleted from the database.")
+                print("You have to enter DELETE in all uppercase, if you wish to delete an animal.")
+                print("")
+                time.sleep(1)
 
     def main_menu(self):
         '''Option selection screen'''
