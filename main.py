@@ -22,11 +22,21 @@ class ShelterManager:
         self.conn.commit()
         print("")
 
-    def add_animal(self, animal):
-        self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (animal.name, animal.animal_type, animal.date_of_birth, animal.size, animal.color) )
+    def add_animal(self):
+        enter_animal_name = input("Enter the name of the animal: ").upper()
+        enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
+        enter_animal_date_of_birth = input("Enter the date of birth (or an estimate): ").upper()
+        enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
+        enter_animal_color = input("Enter the animal's color: ").upper()
+        self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color) )
         self.conn.commit()
-        print("Loading the main menu...")
-        time.sleep(2)
+        print("")
+        print(f"You have just added {enter_animal_name} to the database.")
+        time.sleep(1)
+        print(f"Printing {enter_animal_name}'s details:")
+        time.sleep(1)
+        self.print_details_of_one_animal(enter_animal_name)
+        time.sleep(1)
         print("")
 
     def print_all_animals_basic_details(self):
@@ -195,13 +205,7 @@ class ShelterManager:
             case "0":
                 self.create_table()
             case "1":
-                enter_animal_name = input("Enter the name of the animal: ").upper()
-                enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
-                enter_animal_date_of_birth = input("Enter the date of birth (or an estimate): ").upper()
-                enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
-                enter_animal_color = input("Enter the animal's color: ").upper()
-                given_animal = Animal(enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color)
-                self.add_animal(given_animal)
+                self.add_animal()
             case "2":
                 self.print_all_animals_basic_details()
             case "3":
