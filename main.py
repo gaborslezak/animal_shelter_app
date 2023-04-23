@@ -38,7 +38,7 @@ class ShelterManager:
 
     def print_details_of_one_animal(self):
         print("")
-        animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.")
+        animal_name = input("Which animal would you like to get more information? Please enter the name of the animal.").upper()
         animal_query = ("SELECT * FROM animal_database WHERE name = ?")
         self.cur.execute(animal_query, (animal_name,))
         rows = self.cur.fetchall()
@@ -79,11 +79,11 @@ class ShelterManager:
             case "0":
                 self.create_table()
             case "1":
-                enter_animal_name = input("Enter the name of the animal: ")
-                enter_animal_type = input("Enter the animal's type (CAT or DOG): ")
-                enter_animal_date_of_birth = input("Enter the date of birth (or an estimate): ")
-                enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ")
-                enter_animal_color = input("Enter the animal's color: ")
+                enter_animal_name = input("Enter the name of the animal: ").upper()
+                enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
+                enter_animal_date_of_birth = input("Enter the date of birth (or an estimate): ").upper()
+                enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
+                enter_animal_color = input("Enter the animal's color: ").upper()
                 given_animal = Animal(enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color)
                 self.add_animal(given_animal)
             case "2":
