@@ -111,7 +111,7 @@ class ShelterManager:
             print("")
 
     def print_details_of_one_animal(self, animal_name: str):
-        '''Prints out the all the details of given animal.'''
+        '''Prints out all the details of the given animal.'''
         print("")
         animal_query = ("SELECT * FROM animal_database WHERE name = ?")
         self.cur.execute(animal_query, (animal_name,))
@@ -162,7 +162,7 @@ class ShelterManager:
         except sqlite3.IntegrityError:
             print("")
             print("ERROR:")
-            print("These database uses the animal's name as primary key.")
+            print("This database uses the animal's name as primary key.")
             print("Therefore only one animal can hold a name, each name must be unique!")
             print("")
 
@@ -174,7 +174,7 @@ class ShelterManager:
         self.cur.execute(type_change_query, (new_animal_type, animal_name))
         self.conn.commit()
         time.sleep(1)
-        print(f"{animal_name}'s details has been changed. Type: {new_animal_type}.")
+        print(f"{animal_name}'s type has been changed. Type: {new_animal_type}.")
         time.sleep(1)
         print(f"Printing {animal_name}'s details:")
         time.sleep(2)
@@ -232,7 +232,7 @@ class ShelterManager:
             return False
 
     def update_animal_information(self):
-        '''Updates to change the color of an animal'''
+        '''Used to change the color of an animal'''
         print("")
         self.print_all_animals_basic_details()
         print("")
@@ -249,7 +249,7 @@ class ShelterManager:
             print("")
             print(f"What data would you like to change on {animal_name} profile?")
             print("{:<15} {:<15} {:<15} {:<15} {:<15}".format("1. NAME", "2. TYPE", "3. DATE OF BIRTH", "4. SIZE", "5. COLOR"))
-            select_data = input("Enter the data's number, that you would like to change.")
+            select_data = input("Enter the number of the data that you would like to change.")
             match select_data:
                 case "1":
                     self.change_name_of_animal(animal_name)
@@ -275,7 +275,7 @@ class ShelterManager:
             print("Please check if you provided the correct name.")
             print("")
         else:
-            print("Are you sure about this? You can't revert these changes")
+            print("Are you sure about this? You can't revert these changes.")
             make_sure = input(f"Type DELETE (in uppercase) if you really would like to delete {animal_name} from the database: ")
             if make_sure == "DELETE":
                 delete_query = ("DELETE FROM animal_database WHERE name = ?")
@@ -315,7 +315,7 @@ class ShelterManager:
             case "2":
                 self.print_all_animals_basic_details()
             case "3":
-                animal_name = input("Which animal would you like to get more information? Please enter the name of the animal: ").upper()
+                animal_name = input("Which animal would you like to get more information on? Please enter the animal's name: ").upper()
                 self.print_details_of_one_animal(animal_name)
             case "4":
                 self.update_animal_information()
@@ -326,6 +326,10 @@ class ShelterManager:
             case "10":
                 self.conn.close()
                 exit(0)
+            case _:
+                print("")
+                print("Invalid option, try again.")
+                print("")
 
 if __name__ == "__main__":
     while True:
@@ -334,11 +338,11 @@ if __name__ == "__main__":
             time.sleep(.5)
             print("------------------------------------------------")
             print("")
-            print("Looks like you haven't created a database for your shelter yet.")
+            print("It seems like you haven't created a database for your shelter yet.")
             print("What would you like to do?")
             print("Type '0' to create a database.")
             time.sleep(.5)
-            print("Type '10' to exit the program")
+            print("Type '10' to exit the program.")
             time.sleep(.5)
             select_menu = input("Enter 0 or 10: ")
             match select_menu:
