@@ -16,7 +16,7 @@ class Animal:
         self.color = color
 
 class ShelterManager:
-    def __init__(self, database_path) -> None:
+    def __init__(self, database_path: str) -> None:
         self.conn = sqlite3.connect(database_path)
         self.cur = self.conn.cursor()
         self.create_table()
@@ -91,7 +91,10 @@ class ShelterManager:
 
     def print_all_animals_basic_details(self):
         '''Prints out the basic details of all animals from the database.'''
+        print("")
         try:
+            print("BASIC DETAILS OF ALL THE ANIMALS IN THE DATABASE:")
+            print("")
             animals = {}
             self.cur.execute("SELECT * FROM animal_database")
             rows = self.cur.fetchall()
@@ -101,6 +104,7 @@ class ShelterManager:
             animal_data.reset_index(inplace=True)
             animal_data.columns = ["---NAME---", "--TYPE--", "--DATE OF BIRTH--", "--Size--", "--Color--"]
             print(animal_data)
+            print("")
         except Exception:
             print("")
             print("There was an error. There are no animals in the database")
@@ -221,27 +225,45 @@ class ShelterManager:
         time.sleep(2)
         self.print_details_of_one_animal(animal_name)
 
+    def check_animal_in_db(self, animal_name):
+        animal_query = ("SELECT * FROM animal_database WHERE name = ?")
+        self.cur.execute(animal_query, (animal_name,))
+        rows = self.cur.fetchall()
+        if not rows:
+            return True
+        else:
+            return False
+
     def update_animal_information(self):
         '''Updates to change the color of an animal'''
         print("")
         self.print_all_animals_basic_details()
         print("")
         animal_name = input("Which animal's information would you like to change? Enter the animal's name: ").upper()
-        print("")
-        print(f"What data would you like to change on {animal_name} profile?")
-        print("{:<15} {:<15} {:<15} {:<15} {:<15}".format("1. NAME", "2. TYPE", "3. DATE OF BIRTH", "4. SIZE", "5. COLOR"))
-        select_data = input("Enter the data's number, that you would like to change.")
-        match select_data:
-            case "1":
-                self.change_name_of_animal(animal_name)
-            case "2":
-                self.change_type_of_animal(animal_name)
-            case "3":
-                self.change_dob_of_animal(animal_name)
-            case "4":
-                self.change_size_of_animal(animal_name)
-            case "5":
-                self.change_color_of_animal(animal_name)
+        animal_query = ("SELECT * FROM animal_database WHERE name = ?")
+        self.cur.execute(animal_query, (animal_name,))
+        rows = self.cur.fetchall()
+        if not rows:
+            print("")
+            print("There was a problem!")
+            print(f"There is no {animal_name} in the database. Enter a correct one.")
+            print("")
+        else:
+            print("")
+            print(f"What data would you like to change on {animal_name} profile?")
+            print("{:<15} {:<15} {:<15} {:<15} {:<15}".format("1. NAME", "2. TYPE", "3. DATE OF BIRTH", "4. SIZE", "5. COLOR"))
+            select_data = input("Enter the data's number, that you would like to change.")
+            match select_data:
+                case "1":
+                    self.change_name_of_animal(animal_name)
+                case "2":
+                    self.change_type_of_animal(animal_name)
+                case "3":
+                    self.change_dob_of_animal(animal_name)
+                case "4":
+                    self.change_size_of_animal(animal_name)
+                case "5":
+                    self.change_color_of_animal(animal_name)
 
     def delete_animal(self, animal_name: str):
         '''Deletes an animal from the database'''
