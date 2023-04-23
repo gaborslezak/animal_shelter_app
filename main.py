@@ -42,21 +42,28 @@ class ShelterManager:
         animal_query = ("SELECT * FROM animal_database WHERE name = ?")
         self.cur.execute(animal_query, (animal_name,))
         rows = self.cur.fetchall()
-        print("")
-        print("-------------------------------------------")
-        print(f"Details of {animal_name}")
-        print("-------------------------------------------")
-        for row in rows:
-            print("Name = ", row[0])
-            print("Type  = ", row[1])
-            print("Date of Birth  = ", row[2])
-            print("Size  = ", row[3])
-            print("Color  = ", row[4])
-        print("-------------------------------------------")
-        print(f"------End of {animal_name} details--------")
-        print("-------------------------------------------")
-        print("")
-        print("")
+        if not rows:
+            print("")
+            print("The system was not able to find the animal you are looking for.")
+            print("Please check if you provided the correct name.")
+            print("")
+        else:
+            print("")
+            print("-------------------------------------------")
+            print(f"Details of {animal_name}")
+            print("-------------------------------------------")
+            print(rows)
+            for row in rows:
+                print("Name = ", row[0])
+                print("Type  = ", row[1])
+                print("Date of Birth  = ", row[2])
+                print("Size  = ", row[3])
+                print("Color  = ", row[4])
+            print("-------------------------------------------")
+            print(f"------End of {animal_name} details--------")
+            print("-------------------------------------------")
+            print("")
+            print("")
 
 
     def main_menu(self):
