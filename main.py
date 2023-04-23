@@ -1,6 +1,9 @@
+import os.path
+import time
 import sqlite3
 import pandas
-import time
+
+database_path = "animals.db"
 
 class Animal:
     def __init__(self, name: str, animal_type: str, date_of_birth: str, size: str, color: str) -> None:
@@ -28,7 +31,7 @@ class ShelterManager:
         enter_animal_date_of_birth = input("Enter the date of birth (or an estimate): ").upper()
         enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
         enter_animal_color = input("Enter the animal's color: ").upper()
-        self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color) )
+        self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color))
         self.conn.commit()
         print("")
         print(f"You have just added {enter_animal_name} to the database.")
@@ -186,8 +189,6 @@ class ShelterManager:
         print("Welcome to our ANIMAL SHELTER management system!")
         time.sleep(.5)
         print("------------------------------------------------")
-        print("Type '0' to create a database.")
-        time.sleep(.5)
         print("Type '1' to enter a newly rescued animal.")
         time.sleep(.5)
         print("Type '2' to print every animal's basic details.")
@@ -202,8 +203,6 @@ class ShelterManager:
         time.sleep(.5)
         select_menu = input("What would you like to do? ")
         match select_menu:
-            case "0":
-                self.create_table()
             case "1":
                 self.add_animal()
             case "2":
@@ -221,6 +220,30 @@ class ShelterManager:
                 exit(0)
 
 if __name__ == "__main__":
-    shelter_manager = ShelterManager("animals.db")
+    print("Welcome to our ANIMAL SHELTER management system! FIIIIRSST")
     while True:
-        shelter_manager.main_menu()
+        if os.path.isfile(database_path) is False:
+            time.sleep(.5)
+            print("------------------------------------------------")
+            print("")
+            print("Looks like you haven't created a database for your shelter yet.")
+            print("What would you like to do?")
+            print("Type '0' to create a database.")
+            time.sleep(.5)
+            print("Type '10' to exit the program")
+            time.sleep(.5)
+            select_menu = input("Enter 0 or 10: ")
+            match select_menu:
+                case "0":
+                    shelter_manager = ShelterManager("animals.db")
+                case "10":
+                    exit(0)
+                case _:
+                    print("")
+                    print("Invalid option, try again.")
+                    print("")
+                    continue
+        else:
+            shelter_manager = ShelterManager("animals.db")
+            while True:
+                shelter_manager.main_menu()
