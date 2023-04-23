@@ -26,18 +26,18 @@ class ShelterManager:
         self.conn.commit()
         print("")
 
-    def determine_animal_type(self):
+    def determine_animal_type(self) -> str:
         while True:
                 enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
                 regex_type_pattern = r"^(cat|dog)$"
                 if re.match(regex_type_pattern, enter_animal_type, re.IGNORECASE):
-                    print(f"We are adding a {enter_animal_type} to the database.")
+                    print(f"The animal's type is: {enter_animal_type}")
                     break
                 else:
                     print("You have to enter one of these two option: CAT or DOG")
         return enter_animal_type
     
-    def determine_animal_dob(self):
+    def determine_animal_dob(self) -> str:
         while True:
             print("Enter the date of birth (or an estimate),")
             enter_animal_date_of_birth = input("in the following format YYYY-MM-DD: ").upper()
@@ -49,7 +49,7 @@ class ShelterManager:
                 print("")
         return enter_animal_date_of_birth
 
-    def determine_animal_size(self):
+    def determine_animal_size(self) -> str:
         while True:
             enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
             regex_size_pattern = r"^(small|medium|large|)$"
@@ -99,7 +99,7 @@ class ShelterManager:
             print("There was an error. There are no animals in the database")
             print("")
 
-    def print_details_of_one_animal(self, animal_name):
+    def print_details_of_one_animal(self, animal_name: str):
         print("")
         animal_query = ("SELECT * FROM animal_database WHERE name = ?")
         self.cur.execute(animal_query, (animal_name,))
@@ -133,7 +133,7 @@ class ShelterManager:
             print("Loading the main menu...")
             time.sleep(2)
 
-    def change_name_of_animal(self, animal_name):
+    def change_name_of_animal(self, animal_name: str):
         try:
             print("")
             new_animal_name = input(f"What's the new name of {animal_name}?").upper()
@@ -153,9 +153,10 @@ class ShelterManager:
             print("Therefore only one animal can hold a name, each name must be unique!")
             print("")
 
-    def change_type_of_animal(self, animal_name):
+    def change_type_of_animal(self, animal_name: str):
         print("")
-        new_animal_type = input(f"What's the type of the {animal_name}?").upper()
+        # new_animal_type = input(f"What's the type of the {animal_name}?").upper()
+        new_animal_type = self.determine_animal_type()
         type_change_query = ("UPDATE animal_database SET animal_type = ? WHERE name =?")
         self.cur.execute(type_change_query, (new_animal_type, animal_name))
         self.conn.commit()
@@ -166,9 +167,10 @@ class ShelterManager:
         time.sleep(2)
         self.print_details_of_one_animal(animal_name)
     
-    def change_dob_of_animal(self, animal_name):
+    def change_dob_of_animal(self, animal_name: str):
         print("")
-        new_animal_dob = input(f"What is the correct date of birth of {animal_name}?").upper()
+        new_animal_dob = self.determine_animal_dob()
+        # new_animal_dob = input(f"What is the correct date of birth of {animal_name}?").upper()
         dob_change_query = ("UPDATE animal_database SET date_of_birth = ? WHERE name =?")
         self.cur.execute(dob_change_query, (new_animal_dob, animal_name))
         self.conn.commit()
@@ -179,9 +181,10 @@ class ShelterManager:
         time.sleep(2)
         self.print_details_of_one_animal(animal_name)
 
-    def change_size_of_animal(self, animal_name):
+    def change_size_of_animal(self, animal_name: str):
         print("")
-        new_animal_size = input(f"What is the correct size of {animal_name}").upper()
+        new_animal_size = self.determine_animal_size()
+        # new_animal_size = input(f"What is the correct size of {animal_name}").upper()
         size_change_query = ("UPDATE animal_database SET size = ? WHERE name =?")
         self.cur.execute(size_change_query, (new_animal_size, animal_name))
         self.conn.commit()
@@ -192,7 +195,7 @@ class ShelterManager:
         time.sleep(2)
         self.print_details_of_one_animal(animal_name)
 
-    def change_color_of_animal(self, animal_name):
+    def change_color_of_animal(self, animal_name: str):
         print("")
         new_animal_color = input(f"What is the correct color of {animal_name}?").upper()
         color_change_query = ("UPDATE animal_database SET color = ? WHERE name =?")
@@ -226,7 +229,7 @@ class ShelterManager:
             case "5":
                 self.change_color_of_animal(animal_name)
 
-    def delete_animal(self, animal_name):
+    def delete_animal(self, animal_name: str):
         print("")
         print(f"You are going to delete all details of {animal_name}")
         print("Are you sure about this? You can't revert these changes")
