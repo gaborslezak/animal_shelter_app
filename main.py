@@ -156,6 +156,18 @@ class ShelterManager:
             case "5":
                 self.change_color_of_animal(animal_name)
 
+    def delete_animal(self, animal_name):
+        print("")
+        print(f"You are going to delete all details of {animal_name}")
+        print("Are you sure about this? You can't revert these changes")
+        make_sure = input(f"Type DELETE if you really would like to delete {animal_name} from the database: ")
+        if make_sure == "DELETE":
+            delete_query = ("DELETE FROM animal_database WHERE name = ?")
+            self.cur.execute(delete_query, (animal_name,))
+            self.conn.commit()
+        else:
+            print(f"{animal_name} was not deleted from the database.")
+
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
         print("------------------------------------------------")
@@ -164,6 +176,7 @@ class ShelterManager:
         print("Type '2' to print every animal's basic details.")
         print("Type '3' to print all details of an animal. You can search by animal's name.")
         print("Type '4' to change the details of an animal.")
+        print("Type '5' to delete an animal from the database")
         print("Type '10' to exit the program.")
         select_menu = input("What would you like to do? ")
         match select_menu:
@@ -184,6 +197,9 @@ class ShelterManager:
                 self.print_details_of_one_animal(animal_name)
             case "4":
                 self.update_animal_information()
+            case "5":
+                animal_name = input("Which animal would you like to delete? Please enter the name of the animal: ").upper()
+                self.delete_animal(animal_name)
             case "10":
                 exit(0)
 
