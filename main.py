@@ -122,17 +122,24 @@ class ShelterManager:
             time.sleep(2)
 
     def change_name_of_animal(self, animal_name):
-        print("")
-        new_animal_name = input(f"What's the new name of {animal_name}?").upper()
-        name_change_query = ("UPDATE animal_database SET name = ? WHERE name =?")
-        self.cur.execute(name_change_query, (new_animal_name, animal_name))
-        self.conn.commit()
-        time.sleep(1)
-        print(f"{animal_name}'s details has been changed to {new_animal_name}.")
-        time.sleep(1)
-        print(f"Printing {new_animal_name}'s details:")
-        time.sleep(2)
-        self.print_details_of_one_animal(new_animal_name)
+        try:
+            print("")
+            new_animal_name = input(f"What's the new name of {animal_name}?").upper()
+            name_change_query = ("UPDATE animal_database SET name = ? WHERE name =?")
+            self.cur.execute(name_change_query, (new_animal_name, animal_name))
+            self.conn.commit()
+            time.sleep(1)
+            print(f"{animal_name}'s details has been changed to {new_animal_name}.")
+            time.sleep(1)
+            print(f"Printing {new_animal_name}'s details:")
+            time.sleep(2)
+            self.print_details_of_one_animal(new_animal_name)
+        except sqlite3.IntegrityError:
+            print("")
+            print("ERROR:")
+            print("These database uses the animal's name as primary key.")
+            print("Therefore only one animal can hold a name, each name must be unique!")
+            print("")
 
     def change_type_of_animal(self, animal_name):
         print("")
