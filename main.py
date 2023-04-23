@@ -4,7 +4,7 @@ import re
 import sqlite3
 import pandas
 
-database_path = "animals.db"
+database_path_sys = "animals.db"
 
 class Animal:
     def __init__(self, name: str, animal_type: str, date_of_birth: str, size: str, color: str) -> None:
@@ -26,10 +26,8 @@ class ShelterManager:
         self.conn.commit()
         print("")
 
-    def add_animal(self):
-        try:
-            enter_animal_name = input("Enter the name of the animal: ").upper()
-            while True:
+    def determine_animal_type(self):
+        while True:
                 enter_animal_type = input("Enter the animal's type (CAT or DOG): ").upper()
                 regex_type_pattern = r"^(cat|dog)$"
                 if re.match(regex_type_pattern, enter_animal_type, re.IGNORECASE):
@@ -37,22 +35,36 @@ class ShelterManager:
                     break
                 else:
                     print("You have to enter one of these two option: CAT or DOG")
-            while True:
-                print("Enter the date of birth (or an estimate),")
-                enter_animal_date_of_birth = input("in the following format YYYY-MM-DD: ").upper()
-                regex_date_pattern = r"^(\d{4})-(0[1-9]|1[0-2]|[1-9])-([1-9]|0[1-9]|[1-2]\d|3[0-1])$"
-                if re.match(regex_date_pattern, enter_animal_date_of_birth):
-                    break
-                else:
-                    print("You have to enter the DoB in the following format: YYYY-MM-DD")
-                    print("")
-            while True:
-                enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
-                regex_size_pattern = r"^(small|medium|large|)$"
-                if re.match(regex_size_pattern, enter_animal_size, re.IGNORECASE):
-                    break
-                else:
-                    print("You have to enter one of these options: SMALL, MEDIUM or LARGE")
+        return enter_animal_type
+    
+    def determine_animal_dob(self):
+        while True:
+            print("Enter the date of birth (or an estimate),")
+            enter_animal_date_of_birth = input("in the following format YYYY-MM-DD: ").upper()
+            regex_date_pattern = r"^(\d{4})-(0[1-9]|1[0-2]|[1-9])-([1-9]|0[1-9]|[1-2]\d|3[0-1])$"
+            if re.match(regex_date_pattern, enter_animal_date_of_birth):
+                break
+            else:
+                print("You have to enter the DoB in the following format: YYYY-MM-DD")
+                print("")
+        return enter_animal_date_of_birth
+
+    def determine_animal_size(self):
+        while True:
+            enter_animal_size = input("Enter the animal's size (SMALL-MEDIUM-LARGE): ").upper()
+            regex_size_pattern = r"^(small|medium|large|)$"
+            if re.match(regex_size_pattern, enter_animal_size, re.IGNORECASE):
+                break
+            else:
+                print("You have to enter one of these options: SMALL, MEDIUM or LARGE")
+        return enter_animal_size
+
+    def add_animal(self):
+        try:
+            enter_animal_name = input("Enter the name of the animal: ").upper()
+            enter_animal_type = self.determine_animal_type()
+            enter_animal_date_of_birth = self.determine_animal_dob()
+            enter_animal_size = self.determine_animal_size()
             enter_animal_color = input("Enter the animal's color: ").upper()
             self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color))
             self.conn.commit()
@@ -114,7 +126,7 @@ class ShelterManager:
                 print("Color  = ", row[4])
                 time.sleep(.5)
             print("-------------------------------------------")
-            print(f"------End of {animal_name} details--------")
+            print(f"------End of {animal_name}'s details--------")
             print("-------------------------------------------")
             print("")
             print("")
@@ -262,7 +274,7 @@ class ShelterManager:
 
 if __name__ == "__main__":
     while True:
-        if os.path.isfile(database_path) is False:
+        if os.path.isfile(database_path_sys) is False:
             print("Welcome to our ANIMAL SHELTER management system!")
             time.sleep(.5)
             print("------------------------------------------------")
@@ -276,6 +288,9 @@ if __name__ == "__main__":
             select_menu = input("Enter 0 or 10: ")
             match select_menu:
                 case "0":
+                    print("")
+                    print("You have created your database.")
+                    time.sleep(0.5)
                     shelter_manager = ShelterManager("animals.db")
                 case "10":
                     exit(0)
