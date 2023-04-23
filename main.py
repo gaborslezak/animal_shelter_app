@@ -23,11 +23,17 @@ class ShelterManager:
         self.cur.execute("INSERT INTO animal_database VALUES(?, ?, ?, ?, ?)", (animal.name, animal.animal_type, animal.date_of_birth, animal.size, animal.color) )
         self.conn.commit()
 
+    def print_all_animals(self):
+        self.cur.execute("SELECT * FROM animal_database")
+        rows = self.cur.fetchall()
+        print(rows)
+
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
         print("------------------------------------------------")
         print("Type '0' to create a database.")
         print("Type '1' to enter a newly rescued animal.")
+        print("Type '2' to print every animal's details.")
         print("Type '10' to exit the program.")
         select_menu = input("What would you like to do? ")
         match select_menu:
@@ -41,6 +47,8 @@ class ShelterManager:
                 enter_animal_color = input("Enter the animal's color: ")
                 given_animal = Animal(enter_animal_name, enter_animal_type, enter_animal_date_of_birth, enter_animal_size, enter_animal_color)
                 self.add_animal(given_animal)
+            case "2":
+                self.print_all_animals()
             case "10":
                 exit(0)
 
