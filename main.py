@@ -67,7 +67,7 @@ class ShelterManager:
 
     def change_name_of_animal(self, animal_name):
         print("")
-        new_animal_name = input(f"What's the new name of {animal_name}").upper()
+        new_animal_name = input(f"What's the new name of {animal_name}?").upper()
         name_change_query = ("UPDATE animal_database SET name = ? WHERE name =?")
         self.cur.execute(name_change_query, (new_animal_name, animal_name))
         self.conn.commit()
@@ -80,12 +80,25 @@ class ShelterManager:
 
     def change_type_of_animal(self, animal_name):
         print("")
-        new_animal_type = input(f"What's the type of the {animal_name}").upper()
+        new_animal_type = input(f"What's the type of the {animal_name}?").upper()
         type_change_query = ("UPDATE animal_database SET animal_type = ? WHERE name =?")
         self.cur.execute(type_change_query, (new_animal_type, animal_name))
         self.conn.commit()
         time.sleep(1)
         print(f"{animal_name}'s details has been changed. Type: {new_animal_type}.")
+        time.sleep(1)
+        print(f"Printing {animal_name}'s details:")
+        time.sleep(2)
+        self.print_details_of_one_animal(animal_name)
+    
+    def change_dob_of_animal(self, animal_name):
+        print("")
+        new_animal_dob = input(f"What is correct the date of birth of {animal_name}").upper()
+        dob_change_query = ("UPDATE animal_database SET date_of_birth = ? WHERE name =?")
+        self.cur.execute(dob_change_query, (new_animal_dob, animal_name))
+        self.conn.commit()
+        time.sleep(1)
+        print(f"{animal_name}'s date of birth has been changed to {new_animal_dob}.")
         time.sleep(1)
         print(f"Printing {animal_name}'s details:")
         time.sleep(2)
@@ -104,6 +117,8 @@ class ShelterManager:
                 self.change_name_of_animal(animal_name)
             case "2":
                 self.change_type_of_animal(animal_name)
+            case "3":
+                self.change_dob_of_animal(animal_name)
 
     def main_menu(self):
         print("Welcome to our ANIMAL SHELTER management system!")
